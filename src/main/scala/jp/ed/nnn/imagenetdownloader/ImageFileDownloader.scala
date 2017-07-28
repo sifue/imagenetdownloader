@@ -19,7 +19,10 @@ class ImageFileDownloader(outputDirPath: String,
     case DownloadImage(imageNetUrl) => {
 
       val originalSender = sender()
-      val request = new Request.Builder().url(imageNetUrl.url).build()
+      val request = new Request.Builder()
+        .url(imageNetUrl.url)
+        .build()
+
       client.newCall(request).enqueue(new Callback {
         override def onFailure(call: Call, e: IOException): Unit = {
           originalSender ! DownloadFailure(e, imageNetUrl)

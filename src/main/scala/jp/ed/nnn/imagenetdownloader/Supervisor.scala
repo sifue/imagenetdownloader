@@ -1,10 +1,11 @@
 package jp.ed.nnn.imagenetdownloader
 
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, Props}
 import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
-import okhttp3.OkHttpClient
+import okhttp3._
 
 import scala.io.Source
 
@@ -17,7 +18,11 @@ case class DownloadFailure(e: IOException, imageNetUrl: ImageNetUrl) extends Sup
 
 class Supervisor(config: Config) extends Actor {
 
-  val client = new OkHttpClient()
+  val client = new OkHttpClient.Builder()
+    .connectTimeout(1, TimeUnit.SECONDS)
+    .writeTimeout(1, TimeUnit.SECONDS)
+    .readTimeout(1, TimeUnit.SECONDS)
+    .build()
 
   var originalSender = Actor.noSender
   var router = {Router(RoundRobinRoutingLogic(), Vector[ActorRefRoutee]())}

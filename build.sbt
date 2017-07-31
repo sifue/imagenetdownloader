@@ -9,3 +9,5 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-testkit" % "2.5.3" % Test,
   "com.squareup.okhttp3" % "okhttp" % "3.8.1"
 )
+
+mainClass in assembly := Some("jp.ed.nnn.imagenetdownloader.Main")

@@ -1,6 +1,5 @@
 package jp.ed.nnn.imagenetdownloader
 
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, Props}
@@ -27,6 +26,7 @@ class Supervisor(config: Config) extends Actor {
 
   var successCount = 0
   var failureCount = 0
+  var finishCount = 0
 
   override def receive = {
 
@@ -65,8 +65,9 @@ class Supervisor(config: Config) extends Actor {
       failureCount += 1
     }
 
-    case Finished => originalSender ! Finished
-
+    case Finished =>
+      finishCount += 1
+      if (finishCount == config.numOfDownloader) originalSender ! Finished
   }
 
   private[this] def printConsole(): Unit = {

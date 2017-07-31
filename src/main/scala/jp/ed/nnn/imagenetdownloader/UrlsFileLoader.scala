@@ -5,20 +5,27 @@ import akka.actor.Actor
 import scala.io.{Codec, Source}
 
 sealed trait UrlsFileLoaderMessage
-case class LoadUrlsFile(urlsFilePath: String) extends UrlsFileLoaderMessage
+case object LoadUrlsFile extends UrlsFileLoaderMessage
 
-class UrlsFileLoader extends Actor {
+class UrlsFileLoader(urlsFilePath: String) extends Actor {
+
+  val urlsFileSource = Source.fromFile(urlsFilePath)(Codec.UTF8)
+  val urlsIterator = urlsFileSource.getLines()
 
   override def receive = {
-    case LoadUrlsFile(urlsFilePath) =>
-      val urlsFileSource = Source.fromFile(urlsFilePath)(Codec.UTF8)
-      urlsFileSource.getLines().foreach(line => {
+
+    case LoadUrlsFile =>
+      if (urlsIterator.hasNext) {
+        val line = urlsIterator.next()
         val strs = line.split("\t")
         val id = strs.head
         val url = strs.tail.mkString("\t")
         val wnid = id.split("_").head
         val imageNetUrl = ImageNetUrl(id, url, wnid)
         sender() ! imageNetUrl
-      })
+      } else {
+        sender() ! Finished
+      }
+
   }
 }

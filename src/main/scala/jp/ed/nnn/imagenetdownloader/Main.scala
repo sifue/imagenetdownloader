@@ -12,7 +12,7 @@ object Main extends App {
   val wordsFilePath = "/Users/soichiro_yoshimura/Desktop/ImageUrls/words.txt"
   val urlsFilePath = "/Users/soichiro_yoshimura/Desktop/ImageUrls/fall11_urls.txt"
   val outputDirPath = "/Users/soichiro_yoshimura/Desktop/imagenet_download"
-  val numOfDownloader = 200
+  val numOfDownloader = 2000
 
   val system = ActorSystem("imagenetdownloader")
   val inbox = Inbox.create(system)

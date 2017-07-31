@@ -13,7 +13,7 @@ sealed trait SupervisorMessage
 case object Start extends SupervisorMessage
 case object Finished extends SupervisorMessage
 case class DownloadSuccess(tmpFilePath: String, imageNetUrl: ImageNetUrl) extends SupervisorMessage
-case class DownloadFailure(e: IOException, imageNetUrl: ImageNetUrl) extends SupervisorMessage
+case class DownloadFailure(e: Throwable, imageNetUrl: ImageNetUrl) extends SupervisorMessage
 
 class Supervisor(config: Config) extends Actor {
 

@@ -6,6 +6,8 @@ import java.nio.file.{Files, Paths, StandardOpenOption}
 import akka.actor.{Actor, ActorRef}
 import okhttp3._
 
+import scala.util.{Failure, Success, Try}
+
 sealed trait ImageFileDownloaderMessage
 case object DownloadImage extends ImageFileDownloaderMessage
 case class ImageNetUrl(id: String, url: String, wnid: String) extends ImageFileDownloaderMessage
@@ -54,13 +56,23 @@ class ImageFileDownloader(outputDirPath: String,
               dir)
 
             val tmpFilePath = Paths.get(downloadFile.getAbsolutePath)
-            Files.write(tmpFilePath, response.body().bytes(), StandardOpenOption.WRITE)
-            originalSender ! DownloadSuccess(downloadFile.getAbsolutePath, imageNetUrl)
-            downloadNext()
+            Try {
+              Files.write(tmpFilePath, response.body().bytes(), StandardOpenOption.WRITE)
+            } match {
+              case Success(v) => {
+                originalSender ! DownloadSuccess(downloadFile.getAbsolutePath, imageNetUrl)
+              }
+              case Failure(e) =>  {
+                downloadFile.delete()
+                originalSender ! DownloadFailure(e, imageNetUrl)
+              }
+            }
+
           } else {
             originalSender ! DownloadFailure(new DownloadFailException, imageNetUrl)
-            downloadNext()
           }
+
+          downloadNext()
           response.close()
         }
       })

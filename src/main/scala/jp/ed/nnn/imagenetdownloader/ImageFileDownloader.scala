@@ -26,7 +26,7 @@ class ImageFileDownloader(outputDirPath: String,
   override def receive = {
 
     case DownloadImage => {
-      originalSender = sender()
+      if(sender() != self) originalSender = sender()
       urlsFileLoader ! LoadUrlsFile
     }
 

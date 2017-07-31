@@ -61,6 +61,7 @@ class ImageFileDownloader(outputDirPath: String,
             originalSender ! DownloadFailure(new DownloadFailException, imageNetUrl)
             downloadNext()
           }
+          response.close()
         }
       })
     }

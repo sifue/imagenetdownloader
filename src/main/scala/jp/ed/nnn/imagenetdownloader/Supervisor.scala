@@ -4,7 +4,7 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, Props}
-import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router, Broadcast}
+import akka.routing.{ActorRefRoutee, Broadcast, RoundRobinRoutingLogic, Router}
 import okhttp3._
 
 import scala.io.Source

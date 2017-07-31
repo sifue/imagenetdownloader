@@ -1,6 +1,9 @@
 package jp.ed.nnn.imagenetdownloader
 
+import java.util.logging.{Level, Logger}
+
 import akka.actor.{ActorSystem, Inbox, Props}
+import okhttp3.OkHttpClient
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -24,6 +27,6 @@ object Main extends App {
     )))
   supervisor ! Start
 
-  inbox.receive(365.days)
+  inbox.receive(100.days)
   Await.ready(system.terminate(), Duration.Inf)
 }

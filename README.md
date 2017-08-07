@@ -1,6 +1,6 @@
 # ImageNetDownloader
 
-Image File Downloader for [ImageNet](http://image-net.org/) with multi-thread and http connection pool.
+Image File Downloader for [ImageNet](http://image-net.org/) with multi-threaded and http connection pool.
 Using Akka Actor and OkHttp.
 
 # Get Urls and Words
